@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Args` struct in crate `args`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Args">
+
+    <title>args::args::Args - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='../index.html'>args</a>::<wbr><a href='index.html'>args</a></p><script>window.sidebarCurrent = {name: 'Args', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../index.html'>args</a>::<wbr><a href='index.html'>args</a>::<wbr><a class='struct' href=''>Args</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-191' class='srclink' href='../../src/args/args/mod.rs.html#22-28' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct Args {
+    // some fields omitted
+}</pre><div class='docblock'><p>A dead simple implementation of command line argument parsing and validation.</p>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../../args/args/struct.Args.html' title='args::args::Args'>Args</a></code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>(program_name: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='struct' href='../../args/args/struct.Args.html' title='args::args::Args'>Args</a></code></h4>
+<div class='docblock'><p>Creates an empty set of command line options.</p>
+</div><h4 id='method.flag' class='method'><code>fn <a href='#method.flag' class='fnname'>flag</a>(&amp;mut self, short_name: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, long_name: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, desc: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; &amp;mut <a class='struct' href='../../args/args/struct.Args.html' title='args::args::Args'>Args</a></code></h4>
+<div class='docblock'><p>Registers an optional flag argument that does not take an argument and defaults to false.</p>
+
+<ul>
+<li><code>short_name</code> - e.g. <code>&quot;h&quot;</code> for a <code>-h</code> option, or <code>&quot;&quot;</code> for none</li>
+<li><code>long_name</code> - e.g. <code>&quot;help&quot;</code> for a <code>--help</code> option, or <code>&quot;&quot;</code> for none</li>
+<li><code>desc</code> - A description of the flag for the usage message</li>
+</ul>
+</div><h4 id='method.full_usage' class='method'><code>fn <a href='#method.full_usage' class='fnname'>full_usage</a>(&amp;self, brief: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a></code></h4>
+<div class='docblock'><p>Generates a combination of the short and verbose usage messages.</p>
+</div><h4 id='method.option' class='method'><code>fn <a href='#method.option' class='fnname'>option</a>(&amp;mut self, short_name: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, long_name: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, desc: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, hint: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, occur: <a class='enum' href='../../getopts/enum.Occur.html' title='getopts::Occur'>Occur</a>, default: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;) -&gt; &amp;mut <a class='struct' href='../../args/args/struct.Args.html' title='args::args::Args'>Args</a></code></h4>
+<div class='docblock'><p>Registers an option explicitly.</p>
+
+<ul>
+<li><code>short_name</code> - e.g. <code>&quot;h&quot;</code> for a <code>-h</code> option, or <code>&quot;&quot;</code> for none</li>
+<li><code>long_name</code> - e.g. <code>&quot;help&quot;</code> for a <code>--help</code> option, or <code>&quot;&quot;</code> for none</li>
+<li><code>desc</code> - A description of the flag for the usage message</li>
+<li><code>hint</code> - A hint to be used in place of the argument in the usage message,
+e.g. <code>&quot;FILE&quot;</code> for a <code>-o FILE</code> option</li>
+<li><code>occur</code> - An enum representing whether the option is required or not</li>
+<li><code>default</code> - The default value for this option if there should be one</li>
+</ul>
+</div><h4 id='method.parse' class='method'><code>fn <a href='#method.parse' class='fnname'>parse</a>&lt;C: <a class='trait' href='https://doc.rust-lang.org/nightly/core/iter/trait.IntoIterator.html' title='core::iter::IntoIterator'>IntoIterator</a>&gt;(&amp;mut self, raw_args: C) -&gt; &amp;mut <a class='struct' href='../../args/args/struct.Args.html' title='args::args::Args'>Args</a> <span class='where'>where C::Item: <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.AsRef.html' title='core::convert::AsRef'>AsRef</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/std/ffi/os_str/struct.OsStr.html' title='std::ffi::os_str::OsStr'>OsStr</a>&gt;</span></code></h4>
+<div class='docblock'><p>Parses arguments according to the registered options.</p>
+
+<h1 id='panics' class='section-header'><a href='#panics'>Panics</a></h1>
+<p>If any errors are encountered during parsing this method will panic.</p>
+</div><h4 id='method.parse_from_cli' class='method'><code>fn <a href='#method.parse_from_cli' class='fnname'>parse_from_cli</a>(&amp;mut self) -&gt; &amp;mut <a class='struct' href='../../args/args/struct.Args.html' title='args::args::Args'>Args</a></code></h4>
+<div class='docblock'><p>Parses arguments directly from the command line according to the registered options.</p>
+
+<h1 id='panics-1' class='section-header'><a href='#panics-1'>Panics</a></h1>
+<p>If any errors are encountered during parsing this method will panic.</p>
+</div><h4 id='method.short_usage' class='method'><code>fn <a href='#method.short_usage' class='fnname'>short_usage</a>(&amp;self) -&gt; <a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a></code></h4>
+<div class='docblock'><p>Generates a one-line usage summary from the registered options.</p>
+</div><h4 id='method.usage' class='method'><code>fn <a href='#method.usage' class='fnname'>usage</a>(&amp;self, brief: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a></code></h4>
+<div class='docblock'><p>Generates a verbose usage summary from the registered options.</p>
+</div><h4 id='method.validated_value_of' class='method'><code>fn <a href='#method.validated_value_of' class='fnname'>validated_value_of</a>&lt;T: <a class='trait' href='https://doc.rust-lang.org/nightly/core/str/trait.FromStr.html' title='core::str::FromStr'>FromStr</a>&gt;(&amp;self, opt_name: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, validations: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a class='struct' href='https://doc.rust-lang.org/nightly/alloc/boxed/struct.Box.html' title='alloc::boxed::Box'>Box</a>&lt;<a class='trait' href='../../args/args/trait.Validation.html' title='args::args::Validation'>Validation</a>&lt;T=T&gt;&gt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;T, <a class='struct' href='../../args/args/struct.ArgsError.html' title='args::args::ArgsError'>ArgsError</a>&gt;</code></h4>
+<div class='docblock'><p>Retrieves the value of the <code>Opt</code> identified by <code>opt_name</code>, casts it to
+the type specified by <code>T</code> and then runs all provided <code>Validation</code>s. Returns
+<code>Err(ArgsError)</code> if no <code>Opt</code> correspond to <code>opt_name</code>, if the value cannot
+be cast to type <code>T</code> or if any validation is considered invalid.</p>
+</div><h4 id='method.value_of' class='method'><code>fn <a href='#method.value_of' class='fnname'>value_of</a>&lt;T: <a class='trait' href='https://doc.rust-lang.org/nightly/core/str/trait.FromStr.html' title='core::str::FromStr'>FromStr</a>&gt;(&amp;self, opt_name: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;T, <a class='struct' href='../../args/args/struct.ArgsError.html' title='args::args::ArgsError'>ArgsError</a>&gt;</code></h4>
+<div class='docblock'><p>Retrieves the value of the <code>Opt</code> identified by <code>opt_name</code> and casts it to
+the type specified by <code>T</code>. Returns <code>Err(ArgsError)</code> if no <code>Opt</code> correspond
+to <code>opt_name</code> or if the value cannot be cast to type <code>T</code>.</p>
+</div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "args";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    
+    <script defer src="../../search-index.js"></script>
+</body>
+</html>

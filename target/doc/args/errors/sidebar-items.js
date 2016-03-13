@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["ArgsError","An implementation of `Error` which may or may not include a scope and/or usage message."]]});
