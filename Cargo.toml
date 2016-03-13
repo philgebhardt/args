@@ -1,12 +1,13 @@
 [package]
-name = "args"
-version = "1.0.0"
 authors = ["Matthew Fornaciari <mattforni@gmail.com>"]
 description = "An argument parsing and validation library designed to take some of tediousness out of the general 'getopts' crate."
+documentation = "http://www.mattforni.com/rust/doc/args/index.html"
+homepage = "https://github.com/mattforni/args"
 keywords = ["args", "argument", "argv", "cli", "command"]
 license = "MIT"
+name = "args"
 repository = "https://github.com/mattforni/args"
-homepage = "https://github.com/mattforni/args"
+version = "1.0.1"
 
 [lib]
 name = "args"
