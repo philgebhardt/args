@@ -21,12 +21,12 @@ pub trait HasArgs: Send {
     }
 
     /// Acts as a convenience method for calling the `Args` implementation.
-    fn parse<C: IntoIterator>(&mut self, raw_args: C) -> &mut Args where C::Item: AsRef<OsStr> {
+    fn parse<C: IntoIterator>(&mut self, raw_args: C) -> Result<(), ArgsError> where C::Item: AsRef<OsStr> {
         self.args().parse(raw_args)
     }
 
     /// Acts as a convenience method for calling the `Args` implementation.
-    fn parse_from_cli(&mut self) -> &mut Args {
+    fn parse_from_cli(&mut self) -> Result<(), ArgsError> {
         self.args().parse_from_cli()
     }
 

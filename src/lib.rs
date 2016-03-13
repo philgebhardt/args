@@ -117,6 +117,8 @@ pub use self::traits::HasArgs;
 
 use self::options::Opt;
 
+const SCOPE_PARSE: &'static str = "parse";
+
 mod errors;
 mod options;
 mod traits;
@@ -214,40 +216,44 @@ impl Args {
 
     /// Parses arguments according to the registered options.
     ///
-    /// # Panics
-    /// If any errors are encountered during parsing, this method will panic.
-    pub fn parse<C: IntoIterator>(&mut self, raw_args: C) -> &mut Args where C::Item: AsRef<OsStr> {
+    /// # Failures
+    /// Fails if any errors are encountered during parsing.
+    pub fn parse<C: IntoIterator>(&mut self, raw_args: C) -> Result<(), ArgsError> where C::Item: AsRef<OsStr> {
         debug!("Parsing args for '{}'", self.program_name);
 
-        // Get matches and panic! if there is a problem parsing
+        // Get matches and return an error if there is a problem parsing
         let matches = match self.options.parse(raw_args) {
             Ok(matches) => { matches },
-            Err(error) => { panic!("{}", error.to_string()) }
+            Err(error) => { return Err(ArgsError::new(SCOPE_PARSE, &error.to_string())) }
         };
 
         // Find matches and store the values (or a default)
         for opt_name in &self.opt_names {
-            let opt = self.opts.get(opt_name).unwrap_or_else(||
-                panic!("{}", Fail::UnrecognizedOption(opt_name.to_string()))
-            );
+            let option = self.opts.get(opt_name);
+            if option.is_none() {
+                return Err(ArgsError::new(SCOPE_PARSE, &Fail::UnrecognizedOption(opt_name.to_string()).to_string()));
+            }
 
+            let opt = option.unwrap();
             let value = opt.parse(&matches).unwrap_or("".to_string());
             if !value.is_empty() {
                 self.values.insert(opt_name.to_string(), value);
             } else {
-                if opt.is_required() { panic!("{}", Fail::ArgumentMissing(opt_name.to_string())); }
+                if opt.is_required() {
+                    return Err(ArgsError::new(SCOPE_PARSE, &Fail::ArgumentMissing(opt_name.to_string()).to_string()));
+                }
             }
         }
-        debug!("Args: {:?}", self.values);
 
-        self
+        debug!("Args: {:?}", self.values);
+        Ok(())
     }
 
     /// Parses arguments directly from the command line according to the registered options.
     ///
-    /// # Panics
-    /// If any errors are encountered during parsing, this method will panic.
-    pub fn parse_from_cli(&mut self) -> &mut Args {
+    /// # Failures
+    /// Fails if any errors are encountered during parsing.
+    pub fn parse_from_cli(&mut self) -> Result<(), ArgsError> {
         // Retrieve the cli args and throw out the program name
         let mut raw_args: Vec<String> = env::args().collect();
         if !raw_args.is_empty() { raw_args.remove(0); }

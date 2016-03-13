@@ -20,6 +20,7 @@ mod has_value {
         use getopts::Occur;
 
         #[test]
+        #[allow(unused_must_use)]
         fn returns_false() {
             let mut args = args!(Occur::Optional, None);
             args.parse(&vec!(""));
@@ -33,6 +34,7 @@ mod has_value {
         use getopts::Occur;
 
         #[test]
+        #[allow(unused_must_use)]
         fn returns_true() {
             let mut args = args!(Occur::Optional, None);
             args.parse(&vec!("-o", "option"));
@@ -43,11 +45,22 @@ mod has_value {
 }
 
 mod parse {
+    mod unrecognized_option {
+        use Args;
+
+        #[test]
+        fn returns_err() {
+            let mut args = args!();
+            assert!(args.parse(&vec!("-i")).is_err());
+        }
+    }
+
     mod flag {
         mod absent {
             use Args;
 
             #[test]
+            #[allow(unused_must_use)]
             fn returns_false() {
                 let mut args = args!();
                 args.parse(&vec!(""));
@@ -60,6 +73,7 @@ mod parse {
             use Args;
 
             #[test]
+            #[allow(unused_must_use)]
             fn returns_true() {
                 let mut args = args!();
                 args.parse(&vec!("-f"));
@@ -70,6 +84,17 @@ mod parse {
     }
 
     mod option {
+        mod argument_missing {
+            use Args;
+            use getopts::Occur;
+
+            #[test]
+            fn returns_err() {
+                let mut args = args!(Occur::Optional, None);
+                assert!(args.parse(&vec!("-o")).is_err());
+            }
+        }
+
         mod optional {
             mod absent {
                 mod defaulted {
@@ -77,6 +102,7 @@ mod parse {
                     use getopts::Occur;
 
                     #[test]
+                    #[allow(unused_must_use)]
                     fn returns_default() {
                         let default = "default";
                         let mut args = args!(Occur::Optional, Some(default.to_string()));
@@ -91,6 +117,7 @@ mod parse {
                     use getopts::Occur;
 
                     #[test]
+                    #[allow(unused_must_use)]
                     fn returns_err() {
                         let mut args = args!(Occur::Optional, None);
                         args.parse(&vec!(""));
@@ -105,6 +132,7 @@ mod parse {
                 use getopts::Occur;
 
                 #[test]
+                #[allow(unused_must_use)]
                 fn returns_value() {
                     let value = "value";
                     let mut args = args!(Occur::Optional, None);
@@ -122,6 +150,7 @@ mod parse {
                     use getopts::Occur;
 
                     #[test]
+                    #[allow(unused_must_use)]
                     fn returns_default() {
                         let default = "default";
                         let mut args = args!(Occur::Req, Some(default.to_string()));
@@ -136,10 +165,9 @@ mod parse {
                     use getopts::Occur;
 
                     #[test]
-                    #[should_panic]
-                    fn panics() {
+                    fn returns_err() {
                         let mut args = args!(Occur::Req, None);
-                        args.parse(&vec!(""));
+                        assert!(args.parse(&vec!("")).is_err());
                     }
                 }
             }
@@ -149,6 +177,7 @@ mod parse {
                 use getopts::Occur;
 
                 #[test]
+                #[allow(unused_must_use)]
                 fn returns_value() {
                     let value = "value";
                     let mut args = args!(Occur::Req, None);
@@ -177,6 +206,7 @@ mod validated_value_of {
             use getopts::Occur;
 
             #[test]
+            #[allow(unused_must_use)]
             fn returns_err() {
                 let value = "value";
                 let mut args = args!(Occur::Req, None);
@@ -193,6 +223,7 @@ mod validated_value_of {
                 use getopts::Occur;
 
                 #[test]
+                #[allow(unused_must_use)]
                 fn returns_err() {
                     let value = "0";
                     let mut args = args!(Occur::Req, None);
@@ -209,6 +240,7 @@ mod validated_value_of {
                 use getopts::Occur;
 
                 #[test]
+                #[allow(unused_must_use)]
                 fn returns_err() {
                     let value = "0";
                     let mut args = args!(Occur::Req, None);
@@ -240,6 +272,7 @@ mod value_of {
             use getopts::Occur;
 
             #[test]
+            #[allow(unused_must_use)]
             fn returns_err() {
                 let value = "value";
                 let mut args = args!(Occur::Req, None);
@@ -254,6 +287,7 @@ mod value_of {
             use getopts::Occur;
 
             #[test]
+            #[allow(unused_must_use)]
             fn returns_ok_value() {
                 let value = "0";
                 let mut args = args!(Occur::Req, None);
