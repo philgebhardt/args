@@ -1,6 +1,6 @@
 [package]
 name = "args"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Matthew Fornaciari <mattforni@gmail.com>"]
 description = "An argument parsing and validation library designed to take some of tediousness out of the general 'getopts' crate."
 keywords = ["args", "argument", "argv", "cli", "command"]
