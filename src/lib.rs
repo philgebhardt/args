@@ -177,6 +177,11 @@ impl Args {
         format!("{}\n\n{}", self.short_usage(), self.usage(brief))
     }
 
+    /// Returns a `bool` indicating whether or not a argument is present.
+    pub fn has_value(&self, opt_name: &str) -> bool {
+        self.values.get(opt_name).is_some()
+    }
+
     /// Registers an option explicitly.
     ///
     /// * `short_name` - e.g. `"h"` for a `-h` option, or `""` for none
@@ -292,7 +297,7 @@ impl Args {
             ArgsError::new(opt_name, "does not have a value")
         ).and_then(|value_string| {
             T::from_str(value_string).or(
-                Err(ArgsError::new(opt_name, &format!("unable to parse {}", value_string)))
+                Err(ArgsError::new(opt_name, &format!("unable to parse '{}'", value_string)))
             )
         })
     }

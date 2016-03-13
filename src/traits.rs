@@ -16,6 +16,11 @@ pub trait HasArgs: Send {
     }
 
     /// Acts as a convenience method for calling the `Args` implementation.
+    fn has_value(&self, opt_name: &str) -> bool {
+        self.args().has_value(opt_name)
+    }
+
+    /// Acts as a convenience method for calling the `Args` implementation.
     fn parse<C: IntoIterator>(&mut self, raw_args: C) -> &mut Args where C::Item: AsRef<OsStr> {
         self.args().parse(raw_args)
     }

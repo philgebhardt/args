@@ -14,6 +14,34 @@ macro_rules! args {
     }};
 }
 
+mod has_value {
+    mod absent {
+        use Args;
+        use getopts::Occur;
+
+        #[test]
+        fn returns_false() {
+            let mut args = args!(Occur::Optional, None);
+            args.parse(&vec!(""));
+
+            assert!(!args.has_value("option"));
+        }
+    }
+
+    mod present {
+        use Args;
+        use getopts::Occur;
+
+        #[test]
+        fn returns_true() {
+            let mut args = args!(Occur::Optional, None);
+            args.parse(&vec!("-o", "option"));
+
+            assert!(args.has_value("option"));
+        }
+    }
+}
+
 mod parse {
     mod flag {
         mod absent {
