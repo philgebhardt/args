@@ -31,6 +31,11 @@ pub trait HasArgs: Send {
     }
 
     /// Acts as a convenience method for calling the `Args` implementation.
+    fn usage(&self, brief: &str) -> String {
+        self.args().usage(brief)
+    }
+
+    /// Acts as a convenience method for calling the `Args` implementation.
     fn validated_value_of<T: FromStr>(&self, opt_name: &str, validations: &[Box<Validation<T=T>>]) -> Result<T, ArgsError> {
         self.args().validated_value_of::<T>(opt_name, validations)
     }
