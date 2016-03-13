@@ -1,1 +1,0 @@
-initSidebarItems({"trait":[["HasArgs","A trait designed to bind arguments and convenience methods to a struct."]]});
