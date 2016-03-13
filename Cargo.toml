@@ -5,6 +5,8 @@ authors = ["Matthew Fornaciari <mattforni@gmail.com>"]
 description = "An argument parsing and validation library designed to take some of tediousness out of the general 'getopts' crate."
 keywords = ["args", "argument", "argv", "cli", "command"]
 license = "MIT"
+repository = "https://github.com/mattforni/args"
+homepage = "https://github.com/mattforni/args"
 
 [lib]
 name = "args"
