@@ -3,8 +3,7 @@ use std::str::FromStr;
 
 use super::{Args,ArgsError,Validation};
 
-/// A trait designed to signify that a struct has arguments and to provide
-/// convenience methods for accessing and mutating said arguments via the struct.
+/// A trait designed to bind arguments and convenience methods to a struct.
 pub trait HasArgs: Send {
     // Instance methods
     /// Returns a mutable references to an `Args` struct.

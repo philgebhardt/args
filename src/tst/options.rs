@@ -15,7 +15,7 @@ mod opt {
     mod is_required {
         mod when_optional {
             use getopts::{HasArg,Occur};
-            use args::options::Opt;
+            use options::Opt;
 
             #[test]
             fn returns_false() {
@@ -28,7 +28,7 @@ mod opt {
         mod when_required {
             mod with_default {
                 use getopts::{HasArg,Occur};
-                use args::options::Opt;
+                use options::Opt;
 
                 #[test]
                 fn returns_false() {
@@ -40,7 +40,7 @@ mod opt {
 
             mod without_default {
                 use getopts::{HasArg,Occur};
-                use args::options::Opt;
+                use options::Opt;
 
                 #[test]
                 fn returns_true() {
@@ -56,7 +56,7 @@ mod opt {
         mod flag {
             mod absent {
                 use getopts::{HasArg,Occur,Options};
-                use args::options::Opt;
+                use options::Opt;
 
                 #[test]
                 fn returns_some_false() {
@@ -73,7 +73,7 @@ mod opt {
 
             mod present {
                 use getopts::{HasArg,Occur,Options};
-                use args::options::Opt;
+                use options::Opt;
 
                 #[test]
                 fn returns_some_true() {
@@ -93,7 +93,7 @@ mod opt {
             mod absent {
                 mod without_default {
                     use getopts::{HasArg,Occur,Options};
-                    use args::options::Opt;
+                    use options::Opt;
 
                     #[test]
                     fn returns_none() {
@@ -109,7 +109,7 @@ mod opt {
 
                 mod with_default {
                     use getopts::{HasArg,Occur,Options};
-                    use args::options::Opt;
+                    use options::Opt;
 
                     #[test]
                     fn returns_some_default() {
@@ -128,7 +128,7 @@ mod opt {
 
             mod present {
                 use getopts::{HasArg,Occur,Options};
-                use args::options::Opt;
+                use options::Opt;
 
                 #[test]
                 fn returns_some_value() {
