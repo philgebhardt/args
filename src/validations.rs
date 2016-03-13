@@ -5,7 +5,7 @@ use super::ArgsError;
 
 /// A trait designed to provide validation for command line argument parsing.
 pub trait Validation {
-    /// The `type` (e.g. i32, String, etc.) to which the validation is applied.
+    /// The `type` (e.g. `i32`, `String`, etc.) to which the validation is applied.
     type T;
 
     // Instance methods
@@ -57,20 +57,20 @@ impl Display for Order {
 
 /// An implementation of the `Validation` trait which tests whether or not
 /// a value adheres to the provided `order` and `bound`. It should be noted
-/// that the type of `bound`, `O`, must implement `Clone`, `Display` and `PartialOrd`.
+/// that the type of `bound`, `O`, must implement `Clone`, `Display` **and** `PartialOrd`.
 ///
-/// # Example
+/// # Examples
 ///
 /// ```{.rust}
-/// use args::{Order,OrderValidation};
+/// use args::{Order,OrderValidation,Validation};
 ///
 /// let validation = OrderValidation::new(Order::GreaterThan, 0u32);
-/// validation.is_valid(1u32) // true
-/// validation.is_valid(0u32) // false
+/// validation.is_valid(&1u32); // true
+/// validation.is_valid(&0u32); // false
 ///
-/// if validation.is_invalid(0u32) {
+/// if validation.is_invalid(&0u32) {
 ///     // do things
-///     error!("{}", validation.error(0u32));
+///     println!("{}", validation.error(&0u32));
 /// }
 /// ```
 pub struct OrderValidation<O: Clone + Display + PartialOrd> {

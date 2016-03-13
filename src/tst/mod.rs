@@ -1,5 +1,5 @@
 mod options;
-mod validates;
+mod validations;
 
 macro_rules! args {
     () => {{
@@ -17,7 +17,7 @@ macro_rules! args {
 mod parse {
     mod flag {
         mod absent {
-            use args::Args;
+            use Args;
 
             #[test]
             fn returns_false() {
@@ -29,7 +29,7 @@ mod parse {
         }
 
         mod present {
-            use args::Args;
+            use Args;
 
             #[test]
             fn returns_true() {
@@ -45,7 +45,7 @@ mod parse {
         mod optional {
             mod absent {
                 mod defaulted {
-                    use args::Args;
+                    use Args;
                     use getopts::Occur;
 
                     #[test]
@@ -59,7 +59,7 @@ mod parse {
                 }
 
                 mod not_defaulted {
-                    use args::Args;
+                    use Args;
                     use getopts::Occur;
 
                     #[test]
@@ -73,7 +73,7 @@ mod parse {
             }
 
             mod present {
-                use args::Args;
+                use Args;
                 use getopts::Occur;
 
                 #[test]
@@ -90,7 +90,7 @@ mod parse {
         mod required {
             mod absent {
                 mod defaulted {
-                    use args::Args;
+                    use Args;
                     use getopts::Occur;
 
                     #[test]
@@ -104,7 +104,7 @@ mod parse {
                 }
 
                 mod not_defaulted {
-                    use args::Args;
+                    use Args;
                     use getopts::Occur;
 
                     #[test]
@@ -117,7 +117,7 @@ mod parse {
             }
 
             mod present {
-                use args::Args;
+                use Args;
                 use getopts::Occur;
 
                 #[test]
@@ -135,7 +135,7 @@ mod parse {
 
 mod validated_value_of {
     mod opt_absent {
-        use args::Args;
+        use Args;
 
         #[test]
         fn returns_err() {
@@ -145,7 +145,7 @@ mod validated_value_of {
 
     mod opt_present {
         mod cannot_be_cast {
-            use args::Args;
+            use Args;
             use getopts::Occur;
 
             #[test]
@@ -160,8 +160,8 @@ mod validated_value_of {
 
         mod can_be_cast {
             mod validation_fails {
-                use args::Args;
-                use args::validations::{Order,OrderValidation};
+                use Args;
+                use validations::{Order,OrderValidation};
                 use getopts::Occur;
 
                 #[test]
@@ -176,8 +176,8 @@ mod validated_value_of {
             }
 
             mod validation_passes {
-                use args::Args;
-                use args::validations::{Order,OrderValidation};
+                use Args;
+                use validations::{Order,OrderValidation};
                 use getopts::Occur;
 
                 #[test]
@@ -198,7 +198,7 @@ mod validated_value_of {
 
 mod value_of {
     mod opt_absent {
-        use args::Args;
+        use Args;
 
         #[test]
         fn returns_err() {
@@ -208,7 +208,7 @@ mod value_of {
 
     mod opt_present {
         mod cannot_be_cast {
-            use args::Args;
+            use Args;
             use getopts::Occur;
 
             #[test]
@@ -222,7 +222,7 @@ mod value_of {
         }
 
         mod can_be_cast {
-            use args::Args;
+            use Args;
             use getopts::Occur;
 
             #[test]

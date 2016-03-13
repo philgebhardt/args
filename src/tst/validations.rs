@@ -2,7 +2,7 @@ mod order {
     mod compare {
         mod greater_than {
             mod when_greater_than {
-                use args::validations::Order;
+                use validations::Order;
 
                 #[test]
                 fn returns_true() {
@@ -11,7 +11,7 @@ mod order {
             }
 
             mod when_equal_to {
-                use args::validations::Order;
+                use validations::Order;
 
                 #[test]
                 fn returns_false() {
@@ -20,7 +20,7 @@ mod order {
             }
 
             mod when_less_than {
-                use args::validations::Order;
+                use validations::Order;
 
                 #[test]
                 fn returns_false() {
@@ -31,7 +31,7 @@ mod order {
 
         mod greater_than_or_equal {
             mod when_greater_than {
-                use args::validations::Order;
+                use validations::Order;
 
                 #[test]
                 fn returns_true() {
@@ -40,7 +40,7 @@ mod order {
             }
 
             mod when_equal_to {
-                use args::validations::Order;
+                use validations::Order;
 
                 #[test]
                 fn returns_true() {
@@ -49,7 +49,7 @@ mod order {
             }
 
             mod when_less_than {
-                use args::validations::Order;
+                use validations::Order;
 
                 #[test]
                 fn returns_false() {
@@ -60,7 +60,7 @@ mod order {
 
         mod less_than {
             mod when_greater_than {
-                use args::validations::Order;
+                use validations::Order;
 
                 #[test]
                 fn returns_false() {
@@ -69,7 +69,7 @@ mod order {
             }
 
             mod when_equal_to {
-                use args::validations::Order;
+                use validations::Order;
 
                 #[test]
                 fn returns_false() {
@@ -78,7 +78,7 @@ mod order {
             }
 
             mod when_less_than {
-                use args::validations::Order;
+                use validations::Order;
 
                 #[test]
                 fn returns_true() {
@@ -89,7 +89,7 @@ mod order {
 
         mod less_than_or_equal {
             mod when_greater_than {
-                use args::validations::Order;
+                use validations::Order;
 
                 #[test]
                 fn returns_false() {
@@ -98,7 +98,7 @@ mod order {
             }
 
             mod when_equal_to {
-                use args::validations::Order;
+                use validations::Order;
 
                 #[test]
                 fn returns_true() {
@@ -107,7 +107,7 @@ mod order {
             }
 
             mod when_less_than {
-                use args::validations::Order;
+                use validations::Order;
 
                 #[test]
                 fn returns_true() {
