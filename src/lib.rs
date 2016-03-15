@@ -40,12 +40,16 @@
 //! extern crate args;
 //! extern crate getopts;
 //!
-//! use args::{Args,Order,OrderValidation};
+//! use args::{Args,ArgsError,Order,OrderValidation};
 //! use getopts::Occur;
 //!
 //! const PROGRAM_NAME: &'static str = "program";
 //!
 //! fn main() {
+//!     parse(&vec!("-i", "15"));
+//! }
+//!
+//! fn parse(input: &Vec<&str>) -> Result<(), ArgsError> {
 //!     let mut args = Args::new(PROGRAM_NAME);
 //!     args.flag("h", "help", "Print the usage menu");
 //!     args.option("i",
@@ -61,36 +65,24 @@
 //!         Occur::Optional,
 //!         None);
 //!
-//!     args.parse(vec!("-i", "15"));
+//!     try!(args.parse(input));
 //!
-//!     match args.value_of("help") {
-//!         Ok(help) => {
-//!             if help {
-//!                 args.full_usage(&format!("How to use {}", PROGRAM_NAME));
-//!                 return;
-//!             }
-//!         },
-//!         Err(error) => {
-//!             println!("{}", error);
-//!             return;
-//!         }
+//!     let help = try!(args.value_of("help"));
+//!     if help {
+//!         args.full_usage(&format!("How to use {}", PROGRAM_NAME));
+//!         return Ok(());
 //!     }
 //!
 //!     let gt_0 = Box::new(OrderValidation::new(Order::GreaterThan, 0u32));
 //!     let lt_10 = Box::new(OrderValidation::new(Order::LessThanOrEqual, 10u32));
-
-//!     match args.validated_value_of("iter", &[gt_0, lt_10]) {
-//!         Ok(iterations) => {
-//!             for _ in 0..iterations {
-//!                 println!("Doing work ...");
-//!             }
 //!
-//!             println!("All done.");
-//!         },
-//!         Err(error) => {
-//!             println!("{}", error.to_string());
-//!         }
+//!     let iters = try!(args.validated_value_of("iter", &[gt_0, lt_10]));
+//!     for iter in 0..iters {
+//!         println!("Working on iteration {}", iter);
 //!     }
+//!     println!("All done.");
+//!
+//!     Ok(())
 //! }
 //! ```
 //!
