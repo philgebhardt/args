@@ -21,7 +21,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! args = "0.1"
+//! args = "1.0"
 //! ```
 //!
 //! and this to your crate root:

@@ -21,7 +21,7 @@ used by adding `args` to the dependencies in your project's `Cargo.toml`.
 
 ```toml
 [dependencies]
-args = "0.1"
+args = "1.0"
 ```
 
 and this to your crate root:
@@ -84,5 +84,4 @@ fn parse(input: &Vec<&str>) -> Result<(), ArgsError> {
 
     Ok(())
 }
-```rust
 
