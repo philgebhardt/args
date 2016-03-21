@@ -1,5 +1,6 @@
 # args
 
+
 A dead simple implementation of command line argument parsing and validation
 built on top of the [getopts](https://crates.io/crates/getopts) crate.
 
@@ -8,9 +9,9 @@ registering possible command line options via the `flag(...)` and `option(...)`
 methods. Once all options have been registered, parse arguments directly from the
 command line, or provide a vector of your own arguments.
 
-If any errors are encountered during parsing the method will panic, otherwise,
-arguments can be retrieved from the `args` instance by calling `value_of(...)`
-or `validated_value_of(...)`.
+Any errors encountered during parsing will be returned wrapped in an `ArgsError`.
+If there are no errors during parsing values may be retrieved from the `args`
+object by simply calling `value_of(...)` and `validated_value_of(...)`.
 
 That's it!
 
@@ -84,4 +85,5 @@ fn parse(input: &Vec<&str>) -> Result<(), ArgsError> {
 
     Ok(())
 }
+```rust
 
