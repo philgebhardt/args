@@ -1,5 +1,4 @@
 // Copyright 2016 Matthew Fornaciari <mattforni@gmail.com>
-//!
 //! A dead simple implementation of command line argument parsing and validation
 //! built on top of the [getopts](https://crates.io/crates/getopts) crate.
 //!
@@ -21,7 +20,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! args = "1.0"
+//! args = "2.0"
 //! ```
 //!
 //! and this to your crate root:
@@ -36,21 +35,24 @@
 //! requires a number of iterations between zero *(0)* and ten *(10)* to be specified,
 //! accepts an optional log file name and responds to the help flag.
 //!
-//! ```{.rust}
+//! ```rust
 //! extern crate args;
 //! extern crate getopts;
 //!
-//! use args::{Args,ArgsError,Order,OrderValidation};
 //! use getopts::Occur;
 //!
+//! use args::{Args,ArgsError};
+//! use args::validations::{Order,OrderValidation};
+//!
+//! const PROGRAM_DESC: &'static str = "Run this program";
 //! const PROGRAM_NAME: &'static str = "program";
 //!
 //! fn main() {
-//!     parse(&vec!("-i", "15"));
+//!     parse(&vec!("-i", "5"));
 //! }
 //!
 //! fn parse(input: &Vec<&str>) -> Result<(), ArgsError> {
-//!     let mut args = Args::new(PROGRAM_NAME);
+//!     let mut args = Args::new(PROGRAM_NAME, PROGRAM_DESC);
 //!     args.flag("h", "help", "Print the usage menu");
 //!     args.option("i",
 //!         "iter",
@@ -69,7 +71,7 @@
 //!
 //!     let help = try!(args.value_of("help"));
 //!     if help {
-//!         args.full_usage(&format!("How to use {}", PROGRAM_NAME));
+//!         args.full_usage();
 //!         return Ok(());
 //!     }
 //!
@@ -97,48 +99,52 @@
 extern crate getopts;
 
 use getopts::{Fail,HasArg,Occur,Options};
-use std::collections::HashMap;
+use std::collections::BTreeMap;
+use std::collections::btree_map::Iter;
 use std::env;
 use std::ffi::OsStr;
+use std::fmt::{self,Display,Formatter};
 use std::iter::IntoIterator;
 use std::str::FromStr;
 
 pub use self::errors::ArgsError;
-pub use self::validations::{Order,Validation,OrderValidation};
-pub use self::traits::HasArgs;
 
 use self::options::Opt;
+use self::validations::Validation;
 
-const SCOPE_PARSE: &'static str = "parse";
+pub mod traits;
+pub mod validations;
 
 mod errors;
 mod options;
-mod traits;
-mod validations;
-
 #[cfg(test)] mod tst;
+
+const COLUMN_WIDTH: usize = 20;
+const SCOPE_PARSE: &'static str = "parse";
 
 /// A dead simple implementation of command line argument parsing and validation.
 pub struct Args {
+    description: String,
     options: Options,
-    opts: HashMap<String, Opt>,
+    opts: BTreeMap<String, Opt>,
     opt_names: Vec<String>,
     program_name: String,
-    values: HashMap<String, String>
+    values: BTreeMap<String, String>
 }
 
 impl Args {
     // Public associated methods
     /// Creates an empty set of command line options.
-    pub fn new(program_name: &str) -> Args {
+    pub fn new(program_name: &str, description: &str) -> Args {
         debug!("Creating new args object for '{}'", program_name);
 
         Args {
+            description: description.to_string(),
             options: Options::new(),
-            opts: HashMap::new(),
+            opts: BTreeMap::new(),
             opt_names: Vec::new(),
             program_name: program_name.to_string(),
-            values: HashMap::new()
+            values: BTreeMap::new()
         }
     }
 
@@ -167,13 +173,18 @@ impl Args {
     }
 
     /// Generates a combination of the short and verbose usage messages.
-    pub fn full_usage(&self, brief: &str) -> String {
-        format!("{}\n\n{}", self.short_usage(), self.usage(brief))
+    pub fn full_usage(&self) -> String {
+        format!("{}\n\n{}", self.short_usage(), self.usage())
     }
 
     /// Returns a `bool` indicating whether or not a argument is present.
     pub fn has_value(&self, opt_name: &str) -> bool {
         self.values.get(opt_name).is_some()
+    }
+
+    /// Returns an iterator visiting all key-value pairs in alphabetical order.
+    pub fn iter(&self) -> Iter<String, String> {
+        self.values.iter()
     }
 
     /// Registers an option explicitly.
@@ -259,8 +270,8 @@ impl Args {
     }
 
     /// Generates a verbose usage summary from the registered options.
-    pub fn usage(&self, brief: &str) -> String {
-        self.options.usage(brief)
+    pub fn usage(&self) -> String {
+        self.options.usage(&self.description)
     }
 
     /// Retrieves the value of the `Opt` identified by `opt_name`, casts it to
@@ -309,4 +320,34 @@ impl Args {
     }
 }
 
+impl Display for Args {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        let mut display = String::new();
+        display.push_str(&format!("{}\n{}",
+            to_column("Args"), column_underline()));
+        for (key, value) in self.values.clone() {
+            display.push_str(&format!("\n{}\t{}",
+                to_column(&key), to_column(&value)));
+        }
+        write!(f, "{}", display)
+    }
+}
+
+// Private associated methods
+fn column_underline() -> String {
+    let mut underline = String::new();
+    for _ in 0..COLUMN_WIDTH { underline.push_str("="); }
+    underline
+}
+
+fn to_column(string: &str) -> String {
+    let mut string = string.to_string();
+    string = if string.len() > COLUMN_WIDTH {
+        string.truncate(COLUMN_WIDTH- 3);
+        format!("{}...", string)
+    } else { string };
+    let mut spaces = String::new();
+    for _ in 0..(COLUMN_WIDTH - string.len()) { spaces.push_str(" "); }
+    format!("{}{}", string, spaces)
+}
 

@@ -1,6 +1,5 @@
 # args
 
-
 A dead simple implementation of command line argument parsing and validation
 built on top of the [getopts](https://crates.io/crates/getopts) crate.
 
@@ -22,7 +21,7 @@ used by adding `args` to the dependencies in your project's `Cargo.toml`.
 
 ```toml
 [dependencies]
-args = "1.0"
+args = "2.0"
 ```
 
 and this to your crate root:
@@ -37,21 +36,24 @@ The following example shows simple command line parsing for an application that
 requires a number of iterations between zero *(0)* and ten *(10)* to be specified,
 accepts an optional log file name and responds to the help flag.
 
-```{.rust}
+```rust
 extern crate args;
 extern crate getopts;
 
-use args::{Args,ArgsError,Order,OrderValidation};
 use getopts::Occur;
 
+use args::{Args,ArgsError};
+use args::validations::{Order,OrderValidation};
+
+const PROGRAM_DESC: &'static str = "Run this program";
 const PROGRAM_NAME: &'static str = "program";
 
 fn main() {
-    parse(&vec!("-i", "15"));
+    parse(&vec!("-i", "5"));
 }
 
 fn parse(input: &Vec<&str>) -> Result<(), ArgsError> {
-    let mut args = Args::new(PROGRAM_NAME);
+    let mut args = Args::new(PROGRAM_NAME, PROGRAM_DESC);
     args.flag("h", "help", "Print the usage menu");
     args.option("i",
         "iter",
@@ -70,7 +72,7 @@ fn parse(input: &Vec<&str>) -> Result<(), ArgsError> {
 
     let help = try!(args.value_of("help"));
     if help {
-        args.full_usage(&format!("How to use {}", PROGRAM_NAME));
+        args.full_usage();
         return Ok(());
     }
 
@@ -85,5 +87,5 @@ fn parse(input: &Vec<&str>) -> Result<(), ArgsError> {
 
     Ok(())
 }
-```rust
+```
 

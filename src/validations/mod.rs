@@ -1,5 +1,6 @@
-use std::fmt;
-use std::fmt::{Display,Formatter};
+//! A module containing enums and traits associated with argument validation.
+
+use std::fmt::{self,Display,Formatter};
 
 use super::ArgsError;
 
@@ -61,8 +62,8 @@ impl Display for Order {
 ///
 /// # Examples
 ///
-/// ```{.rust}
-/// use args::{Order,OrderValidation,Validation};
+/// ```rust
+/// use args::validations::{Order,OrderValidation,Validation};
 ///
 /// let validation = OrderValidation::new(Order::GreaterThan, 0u32);
 /// validation.is_valid(&1u32); // true

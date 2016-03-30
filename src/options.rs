@@ -1,12 +1,10 @@
 use getopts::{HasArg,Matches,Occur,Options};
-use std::fmt;
-use std::fmt::{Debug,Display,Error,Formatter};
+use std::fmt::{self,Debug,Display,Error,Formatter};
 
 macro_rules! unsupported {
     ( $str:expr ) => ( panic!("{} is not supported yet", $str) );
 }
 
-// TODO doc
 pub struct Opt {
     short_name: String,
     long_name: String,
@@ -18,7 +16,6 @@ pub struct Opt {
 }
 
 impl Opt {
-    // TODO doc
     pub fn new(short_name: &str,
             long_name: &str,
             desc: &str,
@@ -46,12 +43,10 @@ impl Opt {
         self.occur == Occur::Req
     }
 
-    // TODO doc
     pub fn name(&self) -> &String {
         &self.long_name
     }
 
-    // TODO doc
     pub fn parse(&self, matches: &Matches) -> Option<String> {
         // If the option does not have an argument, return presence
         if self.has_arg == HasArg::No {
@@ -66,7 +61,6 @@ impl Opt {
         })
     }
 
-    // TODO doc
     pub fn register_option(&self, options: &mut Options) {
         options.opt(&self.short_name,
             &self.long_name,

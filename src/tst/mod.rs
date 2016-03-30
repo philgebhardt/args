@@ -3,12 +3,12 @@ mod validations;
 
 macro_rules! args {
     () => {{
-        let mut args = Args::new("program");
+        let mut args = Args::new("program", "Run this program");
         args.flag("f", "flag", "Flag");
         args
     }};
     ( $occur:expr, $default:expr ) => {{
-        let mut args = Args::new("program");
+        let mut args = Args::new("program", "Run this program");
         args.option("o", "option", "Option", "OPT", $occur, $default);
         args
     }};

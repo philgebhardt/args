@@ -1,6 +1,5 @@
 use std::error::Error;
-use std::fmt;
-use std::fmt::{Debug,Display,Formatter};
+use std::fmt::{self,Debug,Display,Formatter};
 
 /// An implementation of `Error` which may or may not include a scope and/or usage message.
 pub struct ArgsError {
