@@ -276,6 +276,7 @@ impl Args {
 
     /// Generates a verbose usage summary from the registered options.
     pub fn usage(&self) -> String {
+        if !self.has_options() { return self.description.to_string(); }
         self.options.usage(&self.description)
     }
 
