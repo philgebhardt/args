@@ -14,6 +14,42 @@ macro_rules! args {
     }};
 }
 
+mod has_options {
+    mod has_none {
+        use Args;
+
+        #[test]
+        fn it_returns_false() {
+            let args = Args::new("program", "Run this program.");
+
+            assert!(!args.has_options());
+        }
+    }
+
+    mod has_flag {
+        use Args;
+
+        #[test]
+        fn it_returns_true() {
+            let args = args!();
+
+            assert!(args.has_options());
+        }
+    }
+
+    mod has_option {
+        use Args;
+        use getopts::Occur;
+
+        #[test]
+        fn it_returns_true() {
+            let args = args!(Occur::Optional, None);
+
+            assert!(args.has_options());
+        }
+    }
+}
+
 mod has_value {
     mod absent {
         use Args;

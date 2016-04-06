@@ -177,6 +177,11 @@ impl Args {
         format!("{}\n\n{}", self.short_usage(), self.usage())
     }
 
+    /// Returns a `bool` indicating whether or not any options are registered.
+    pub fn has_options(&self) -> bool {
+        !self.opts.is_empty()
+    }
+
     /// Returns a `bool` indicating whether or not a argument is present.
     pub fn has_value(&self, opt_name: &str) -> bool {
         self.values.get(opt_name).is_some()
