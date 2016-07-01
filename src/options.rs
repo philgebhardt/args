@@ -1,11 +1,89 @@
 use getopts::{HasArg,Matches,Occur,Options};
 use std::fmt::{self,Debug,Display,Error,Formatter};
 
+use super::SEPARATOR as SEPARATOR;
+
 macro_rules! unsupported {
     ( $str:expr ) => ( panic!("{} is not supported yet", $str) );
 }
 
-pub struct Opt {
+pub fn new(short_name: &str,
+        long_name: &str,
+        desc: &str,
+        hint: &str,
+        has_arg: HasArg,
+        occur: Occur,
+        default: Option<String>) -> Box<Opt> {
+    if has_arg == HasArg::Maybe { unsupported!("HasArg::Maybe"); }
+
+    if occur != Occur::Multi {
+        Box::new(Single::new(short_name, long_name, desc, hint, has_arg, occur, default))
+    } else {
+        Box::new(Multi::new(short_name, long_name, desc, hint))
+    }
+}
+
+pub trait Opt {
+    fn flag(&self) -> String;
+    fn is_multi(&self) -> bool;
+    fn is_required(&self) -> bool;
+    fn name(&self) -> String;
+    fn parse(&self, matches: &Matches) -> Option<String>;
+    fn register(&self, options: &mut Options);
+}
+
+struct Multi {
+    short_name: String,
+    long_name: String,
+    desc: String,
+    hint: String,
+}
+
+impl Multi {
+    fn new(short_name: &str,
+            long_name: &str,
+            desc: &str,
+            hint: &str) -> Self {
+        Multi {
+            short_name: short_name.to_string(),
+            long_name: long_name.to_string(),
+            desc: desc.to_string(),
+            hint: hint.to_string(),
+        }
+    }
+}
+
+impl Opt for Multi {
+    fn flag(&self) -> String {
+        self.short_name.to_string()
+    }
+
+    fn is_required(&self) -> bool {
+        true
+    }
+
+    fn is_multi(&self) -> bool {
+        true
+    }
+
+    fn name(&self) -> String {
+        self.long_name.to_string()
+    }
+
+    fn parse(&self, matches: &Matches) -> Option<String> {
+        let strs = matches.opt_strs(&self.long_name);
+        if strs.is_empty() { None } else { Some(strs.join(SEPARATOR)) }
+    }
+
+    fn register(&self, options: &mut Options) {
+        options.optmulti(&self.short_name,
+            &self.long_name,
+            &self.desc,
+            &self.hint);
+    }
+}
+
+struct Single {
     short_name: String,
     long_name: String,
     desc: String,
@@ -15,20 +93,18 @@ pub struct Opt {
     default: Option<String>
 }
 
-impl Opt {
-    pub fn new(short_name: &str,
+impl Single {
+    fn new(short_name: &str,
             long_name: &str,
             desc: &str,
             hint: &str,
             has_arg: HasArg,
             occur: Occur,
-            default: Option<String>) -> Opt {
-        if has_arg == HasArg::Maybe { unsupported!("HasArg::Maybe"); }
-        if occur == Occur::Multi { unsupported!("Occur::Multi"); }
-
+            default: Option<String>) -> Self {
         // If there is a default occurence becomes optional
         let occur = if default.is_some() { Occur::Optional } else { occur };
-        Opt {
+
+        Single {
             short_name: short_name.to_string(),
             long_name: long_name.to_string(),
             desc: desc.to_string(),
@@ -38,16 +114,26 @@ impl Opt {
             default: default
         }
     }
+}
 
-    pub fn is_required(&self) -> bool {
+impl Opt for Single {
+    fn flag(&self) -> String {
+        self.short_name.to_string()
+    }
+
+    fn is_required(&self) -> bool {
         self.occur == Occur::Req
     }
 
-    pub fn name(&self) -> &String {
-        &self.long_name
+    fn is_multi(&self) -> bool {
+        false
     }
 
-    pub fn parse(&self, matches: &Matches) -> Option<String> {
+    fn name(&self) -> String {
+        self.long_name.to_string()
+    }
+
+    fn parse(&self, matches: &Matches) -> Option<String> {
         // If the option does not have an argument, return presence
         if self.has_arg == HasArg::No {
             return Some(matches.opt_present(&self.long_name).to_string());
@@ -61,7 +147,7 @@ impl Opt {
         })
     }
 
-    pub fn register_option(&self, options: &mut Options) {
+    fn register(&self, options: &mut Options) {
         options.opt(&self.short_name,
             &self.long_name,
             &self.desc,
@@ -73,13 +159,12 @@ impl Opt {
 
 impl Display for Opt {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
-        write!(f, "option '-{} --{}'", self.short_name, self.long_name)
+        write!(f, "option '-{} --{}'", self.flag(), self.name())
     }
 }
 
 impl Debug for Opt {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        write!(f, "option '-{} --{}'", self.short_name, self.long_name)
+        write!(f, "option '-{} --{}'", self.flag(), self.name())
     }
 }
-
