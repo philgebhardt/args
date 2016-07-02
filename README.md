@@ -41,6 +41,7 @@ extern crate args;
 extern crate getopts;
 
 use getopts::Occur;
+use std::process::exit;
 
 use args::{Args,ArgsError};
 use args::validations::{Order,OrderValidation};
@@ -49,7 +50,13 @@ const PROGRAM_DESC: &'static str = "Run this program";
 const PROGRAM_NAME: &'static str = "program";
 
 fn main() {
-    parse(&vec!("-i", "5"));
+    match parse(&vec!("-i", "5")) {
+        Ok(_) => println!("Successfully parsed args"),
+        Err(error) => {
+            println!("{}", error);
+            exit(1);
+        }
+    };
 }
 
 fn parse(input: &Vec<&str>) -> Result<(), ArgsError> {
@@ -66,7 +73,7 @@ fn parse(input: &Vec<&str>) -> Result<(), ArgsError> {
         "The name of the log file",
         "NAME",
         Occur::Optional,
-        None);
+        Some(String::from("output.log")));
 
     try!(args.parse(input));
 
