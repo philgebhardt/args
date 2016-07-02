@@ -13,6 +13,7 @@
 //! use args::traits::{HasArgs,HasParsedArgs};
 //! use args::validations::{Order,OrderValidation};
 //! use getopts::Occur;
+//! use std::process::exit;
 //!
 //! const PROGRAM_DESC: &'static str = "Run this program";
 //! const PROGRAM_NAME: &'static str = "program";
@@ -70,7 +71,15 @@
 //!     fn parsed_args(&self) -> &Args { &self.parsed_args }
 //! }
 //!
-//! fn main() { Program::new(); }
+//! fn main() {
+//!     match Program::new().map(|program| { program.run() }) {
+//!         Ok(_) => println!("Program ran successfully"),
+//!         Err(error) => {
+//!             println!("{}", error);
+//!             exit(1);
+//!         }
+//!     }
+//! }
 //! ```
 
 pub use self::has_args::HasArgs;

@@ -40,6 +40,7 @@
 //! extern crate getopts;
 //!
 //! use getopts::Occur;
+//! use std::process::exit;
 //!
 //! use args::{Args,ArgsError};
 //! use args::validations::{Order,OrderValidation};
@@ -48,7 +49,13 @@
 //! const PROGRAM_NAME: &'static str = "program";
 //!
 //! fn main() {
-//!     parse(&vec!("-i", "5"));
+//!     match parse(&vec!("-i", "5")) {
+//!         Ok(_) => println!("Successfully parsed args"),
+//!         Err(error) => {
+//!             println!("{}", error);
+//!             exit(1);
+//!         }
+//!     };
 //! }
 //!
 //! fn parse(input: &Vec<&str>) -> Result<(), ArgsError> {
@@ -65,7 +72,7 @@
 //!         "The name of the log file",
 //!         "NAME",
 //!         Occur::Optional,
-//!         None);
+//!         Some(String::from("output.log")));
 //!
 //!     try!(args.parse(input));
 //!
@@ -325,7 +332,7 @@ impl Args {
     ///
     /// Returns `Err(ArgsError)` if no `Opt` corresponds to `opt_name` or if any
     /// of the values cannot be cast to type `T`.
-    pub fn vec_of<T: FromStr>(&self, opt_name: &str) -> Result<Vec<T>, ArgsError> {
+    pub fn values_of<T: FromStr>(&self, opt_name: &str) -> Result<Vec<T>, ArgsError> {
         self.values.get(opt_name).ok_or(
             ArgsError::new(opt_name, "does not have a value")
         ).and_then(|values_str| {

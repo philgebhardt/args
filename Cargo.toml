@@ -17,4 +17,3 @@ path = "src/lib.rs"
 [dependencies]
 getopts = "0"
 log = "0"
-

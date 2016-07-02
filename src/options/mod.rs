@@ -1,6 +1,8 @@
 use getopts::{HasArg,Matches,Occur,Options};
 use std::fmt::{self,Debug,Display,Error,Formatter};
 
+#[cfg(test)] mod tst;
+
 use super::SEPARATOR as SEPARATOR;
 
 macro_rules! unsupported {
@@ -23,7 +25,7 @@ pub fn new(short_name: &str,
     }
 }
 
-pub trait Opt {
+pub trait Opt: Send {
     fn flag(&self) -> String;
     fn is_multi(&self) -> bool;
     fn is_required(&self) -> bool;

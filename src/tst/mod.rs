@@ -1,6 +1,3 @@
-mod options;
-mod validations;
-
 macro_rules! args {
     () => {{
         let mut args = Args::new("program", "Run this program");
@@ -119,7 +116,7 @@ mod parse {
         }
     }
 
-    mod option {
+    mod single {
         mod argument_missing {
             use Args;
             use getopts::Occur;
@@ -220,6 +217,71 @@ mod parse {
                     args.parse(&vec!("-o", value));
 
                     assert_eq!(value.to_string(), args.value_of::<String>("option").unwrap());
+                }
+            }
+        }
+    }
+
+    mod multi {
+        mod argument_missing {
+            use Args;
+            use getopts::Occur;
+
+            #[test]
+            fn returns_err() {
+                let mut args = args!(Occur::Multi, None);
+                assert!(args.parse(&vec!("-o")).is_err());
+            }
+        }
+
+        mod absent {
+            use Args;
+            use getopts::Occur;
+
+            #[test]
+            fn returns_err() {
+                let mut args = args!(Occur::Multi, None);
+                assert!(args.parse(&vec!("")).is_err());
+            }
+        }
+
+        mod present {
+            mod single_arg {
+                use Args;
+                use getopts::Occur;
+
+                #[test]
+                #[allow(unused_must_use)]
+                fn returns_value() {
+                    let value = "value";
+                    let mut args = args!(Occur::Multi, None);
+                    args.parse(&vec!("-o", value));
+
+                    let result = args.values_of::<String>("option");
+                    assert!(result.is_ok());
+                    let results = result.unwrap();
+                    assert_eq!(1, results.len());
+                    assert_eq!(value, results[0]);
+                }
+            }
+
+            mod multiple_args {
+                use Args;
+                use getopts::Occur;
+
+                #[test]
+                #[allow(unused_must_use)]
+                fn returns_values() {
+                    let values = vec!["test", "value"];
+                    let mut args = args!(Occur::Multi, None);
+                    args.parse(&vec!("-o", values[0], "-o", values[1]));
+
+                    let result = args.values_of::<String>("option");
+                    assert!(result.is_ok());
+                    let results = result.unwrap();
+                    assert_eq!(2, values.len());
+                    assert_eq!(values[0], results[0]);
+                    assert_eq!(values[1], results[1]);
                 }
             }
         }
@@ -337,3 +399,49 @@ mod value_of {
     }
 }
 
+mod values_of {
+    mod opt_absent {
+        use Args;
+
+        #[test]
+        fn returns_err() {
+            assert!(args!().values_of::<i32>("").is_err());
+        }
+    }
+
+    mod opt_present {
+        mod cannot_be_cast {
+            use Args;
+            use getopts::Occur;
+
+            #[test]
+            #[allow(unused_must_use)]
+            fn returns_err() {
+                let value = "value";
+                let mut args = args!(Occur::Multi, None);
+                args.parse(&vec!("-o", "0", "-o", value));
+
+                assert!(args.values_of::<i32>("option").is_err());
+            }
+        }
+
+        mod can_be_cast {
+            use Args;
+            use getopts::Occur;
+
+            #[test]
+            #[allow(unused_must_use)]
+            fn returns_ok_value() {
+                let values = vec!["0", "0"];
+                let mut args = args!(Occur::Multi, None);
+                args.parse(&vec!("-o", values[0], "-o", values[1]));
+
+                let result = args.values_of::<i32>("option");
+                assert!(result.is_ok());
+                let results = result.unwrap();
+                assert_eq!(0i32, results[0]);
+                assert_eq!(0i32, results[1]);
+            }
+        }
+    }
+}

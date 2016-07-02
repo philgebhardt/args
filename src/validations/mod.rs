@@ -2,6 +2,8 @@
 
 use std::fmt::{self,Display,Formatter};
 
+#[cfg(test)] mod tst;
+
 use super::ArgsError;
 
 /// A trait designed to provide validation for command line argument parsing.
