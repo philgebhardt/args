@@ -223,6 +223,19 @@ mod parse {
     }
 
     mod multi {
+        mod absent {
+            use Args;
+            use getopts::Occur;
+
+            #[test]
+            fn returns_ok() {
+                let raw_args: Vec<String> = Vec::new();
+                let mut args = args!(Occur::Multi, None);
+                let parse = args.parse(&raw_args);
+                assert!(parse.is_ok(), parse.unwrap_err().to_string());
+            }
+        }
+
         mod argument_missing {
             use Args;
             use getopts::Occur;
@@ -231,17 +244,6 @@ mod parse {
             fn returns_err() {
                 let mut args = args!(Occur::Multi, None);
                 assert!(args.parse(&vec!("-o")).is_err());
-            }
-        }
-
-        mod absent {
-            use Args;
-            use getopts::Occur;
-
-            #[test]
-            fn returns_err() {
-                let mut args = args!(Occur::Multi, None);
-                assert!(args.parse(&vec!("")).is_err());
             }
         }
 

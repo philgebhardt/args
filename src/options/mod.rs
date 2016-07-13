@@ -61,7 +61,7 @@ impl Opt for Multi {
     }
 
     fn is_required(&self) -> bool {
-        true
+        false
     }
 
     fn is_multi(&self) -> bool {
