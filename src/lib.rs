@@ -288,6 +288,35 @@ impl Args {
         self.options.usage(&self.description)
     }
 
+    /// Retrieves the optional value of the `Opt` identified by `opt_name`, casts it to
+    /// the type specified by `T` and wraps it in an optional.
+    ///
+    /// # Failures
+    ///
+    /// See `value_of`
+    fn optional_value_of<T: FromStr>(&self, opt_name: &str) -> Result<Option<T>, ArgsError> {
+        if self.has_value(opt_name) {
+            Ok(Some(try!(self.value_of::<T>(opt_name))))
+        } else {
+            Ok(None)
+        }
+    }
+
+    /// Retrieves the optional value of the `Opt` identified by `opt_name`, casts it to
+    /// the type specified by `T`, runs all provided `Validation`s, and wraps it in an Option<T>.
+    ///
+    /// # Failures
+    ///
+    /// See `validated_value_of`
+    fn validated_optional_value_of<T: FromStr>(&self, opt_name: &str, validations:
+        &[Box<Validation<T=T>>]) -> Result<Option<T>, ArgsError> {
+        if self.has_value(opt_name) {
+            Ok(Some(try!(self.validated_value_of::<T>(opt_name, validations))))
+        } else {
+            Ok(None)
+        }
+    }
+
     /// Retrieves the value of the `Opt` identified by `opt_name`, casts it to
     /// the type specified by `T` and then runs all provided `Validation`s.
     ///
