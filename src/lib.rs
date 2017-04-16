@@ -289,29 +289,29 @@ impl Args {
     }
 
     /// Retrieves the optional value of the `Opt` identified by `opt_name`, casts it to
-    /// the type specified by `T` and wraps it in an optional.
+    /// the type specified by `T`, runs all provided `Validation`s, and wraps it in an Option<T>.
     ///
     /// # Failures
     ///
-    /// See `value_of`
-    fn optional_value_of<T: FromStr>(&self, opt_name: &str) -> Result<Option<T>, ArgsError> {
+    /// See `validated_value_of`
+    pub fn optional_validated_value_of<T>(&self, opt_name: &str, validations: &[Box<Validation<T=T>>])
+                                          -> Result<Option<T>, ArgsError> where T: FromStr {
         if self.has_value(opt_name) {
-            Ok(Some(try!(self.value_of::<T>(opt_name))))
+            Ok(Some(try!(self.validated_value_of::<T>(opt_name, validations))))
         } else {
             Ok(None)
         }
     }
 
     /// Retrieves the optional value of the `Opt` identified by `opt_name`, casts it to
-    /// the type specified by `T`, runs all provided `Validation`s, and wraps it in an Option<T>.
+    /// the type specified by `T` and wraps it in an optional.
     ///
     /// # Failures
     ///
-    /// See `validated_value_of`
-    fn validated_optional_value_of<T: FromStr>(&self, opt_name: &str, validations:
-        &[Box<Validation<T=T>>]) -> Result<Option<T>, ArgsError> {
+    /// See `value_of`
+    pub fn optional_value_of<T: FromStr>(&self, opt_name: &str) -> Result<Option<T>, ArgsError> {
         if self.has_value(opt_name) {
-            Ok(Some(try!(self.validated_value_of::<T>(opt_name, validations))))
+            Ok(Some(try!(self.value_of::<T>(opt_name))))
         } else {
             Ok(None)
         }
@@ -324,8 +324,8 @@ impl Args {
     ///
     /// Returns `Err(ArgsError)` if no `Opt` correspond to `opt_name`, if the value cannot
     /// be cast to type `T` or if any validation is considered invalid.
-    pub fn validated_value_of<T: FromStr>(
-            &self, opt_name: &str, validations: &[Box<Validation<T=T>>]) -> Result<T, ArgsError> {
+    pub fn validated_value_of<T>(&self, opt_name: &str, validations: &[Box<Validation<T=T>>])
+        -> Result<T, ArgsError> where T: FromStr {
         // If the value does not have an error, run validations
         self.value_of::<T>(opt_name).and_then(|value| {
             for validation in validations {
