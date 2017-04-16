@@ -403,13 +403,13 @@ mod optional_value_of {
     }
 }
 
-mod validated_optional_value_of {
+mod optional_validated_value_of {
     mod opt_absent {
         use Args;
 
         #[test]
         fn returns_none() {
-            assert!(args!().validated_optional_value_of::<i32>("", &[]).unwrap().is_none());
+            assert!(args!().optional_validated_value_of::<i32>("", &[]).unwrap().is_none());
         }
     }
 
@@ -425,7 +425,7 @@ mod validated_optional_value_of {
                 let mut args = args!(Occur::Req, None);
                 args.parse(&vec!("-o", value));
 
-                assert!(args.validated_optional_value_of::<i32>("option", &[]).is_err());
+                assert!(args.optional_validated_value_of::<i32>("option", &[]).is_err());
             }
         }
 
@@ -443,7 +443,7 @@ mod validated_optional_value_of {
                     args.parse(&vec!("-o", value));
 
                     let validation = Box::new(OrderValidation::new(Order::GreaterThan, 0i32));
-                    assert!(args.validated_optional_value_of::<i32>("option", &[validation]).is_err());
+                    assert!(args.optional_validated_value_of::<i32>("option", &[validation]).is_err());
                 }
             }
 
@@ -460,7 +460,7 @@ mod validated_optional_value_of {
                     args.parse(&vec!("-o", value));
 
                     let validation = Box::new(OrderValidation::new(Order::GreaterThanOrEqual, 0i32));
-                    let result = args.validated_optional_value_of::<i32>("option", &[validation]);
+                    let result = args.optional_validated_value_of::<i32>("option", &[validation]);
                     assert!(result.is_ok());
                     let optional = result.unwrap();
                     assert!(optional.is_some());
