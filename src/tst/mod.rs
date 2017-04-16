@@ -356,6 +356,121 @@ mod validated_value_of {
     }
 }
 
+mod optional_value_of {
+    mod opt_absent {
+        use Args;
+
+        #[test]
+        fn returns_none() {
+            assert!(!args!().optional_value_of::<i32>("").unwrap().is_some())
+        }
+    }
+
+    mod opt_present {
+        mod cannot_be_cast {
+            use Args;
+            use getopts::Occur;
+
+            #[test]
+            #[allow(unused_must_use)]
+            fn returns_err() {
+                let value = "value";
+                let mut args = args!(Occur::Req, None);
+                args.parse(&vec!("-o", value));
+
+                assert!(args.optional_value_of::<i32>("option").is_err());
+            }
+        }
+
+        mod can_be_cast {
+            use Args;
+            use getopts::Occur;
+
+            #[test]
+            #[allow(unused_must_use)]
+            fn returns_ok_value() {
+                let value = "0";
+                let mut args = args!(Occur::Req, None);
+                args.parse(&vec!("-o", value));
+
+                let result = args.optional_value_of::<i32>("option");
+                assert!(result.is_ok());
+                let optional = result.unwrap();
+                assert!(optional.is_some());
+                assert_eq!(0i32, optional.unwrap());
+            }
+        }
+    }
+}
+
+mod optional_validated_value_of {
+    mod opt_absent {
+        use Args;
+
+        #[test]
+        fn returns_none() {
+            assert!(args!().optional_validated_value_of::<i32>("", &[]).unwrap().is_none());
+        }
+    }
+
+    mod opt_present {
+        mod cannot_be_cast {
+            use Args;
+            use getopts::Occur;
+
+            #[test]
+            #[allow(unused_must_use)]
+            fn returns_err() {
+                let value = "value";
+                let mut args = args!(Occur::Req, None);
+                args.parse(&vec!("-o", value));
+
+                assert!(args.optional_validated_value_of::<i32>("option", &[]).is_err());
+            }
+        }
+
+        mod can_be_cast {
+            mod validation_fails {
+                use Args;
+                use validations::{Order,OrderValidation};
+                use getopts::Occur;
+
+                #[test]
+                #[allow(unused_must_use)]
+                fn returns_err() {
+                    let value = "0";
+                    let mut args = args!(Occur::Req, None);
+                    args.parse(&vec!("-o", value));
+
+                    let validation = Box::new(OrderValidation::new(Order::GreaterThan, 0i32));
+                    assert!(args.optional_validated_value_of::<i32>("option", &[validation]).is_err());
+                }
+            }
+
+            mod validation_passes {
+                use Args;
+                use validations::{Order,OrderValidation};
+                use getopts::Occur;
+
+                #[test]
+                #[allow(unused_must_use)]
+                fn returns_err() {
+                    let value = "0";
+                    let mut args = args!(Occur::Req, None);
+                    args.parse(&vec!("-o", value));
+
+                    let validation = Box::new(OrderValidation::new(Order::GreaterThanOrEqual, 0i32));
+                    let result = args.optional_validated_value_of::<i32>("option", &[validation]);
+                    assert!(result.is_ok());
+                    let optional = result.unwrap();
+                    assert!(optional.is_some());
+                    assert_eq!(0i32, optional.unwrap());
+                }
+            }
+        }
+    }
+}
+
 mod value_of {
     mod opt_absent {
         use Args;

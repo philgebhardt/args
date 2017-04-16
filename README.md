@@ -90,6 +90,14 @@ fn parse(input: &Vec<&str>) -> Result<(), ArgsError> {
     for iter in 0..iters {
         println!("Working on iteration {}", iter);
     }
+
+    let optional_val = try!(Self::optional_value_of::<String>(&args, SERVICE));
+    if let Some(val) = optional_val {
+        // val is `Some`
+    } else {
+        // val is `None`
+    }
+
     println!("All done.");
 
     Ok(())
